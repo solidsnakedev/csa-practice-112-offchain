@@ -1,2 +1,5 @@
 .direnv
 node_modules
+dist
+lib
+.env

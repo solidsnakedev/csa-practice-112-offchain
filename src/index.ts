@@ -1,3 +1,5 @@
+import { generateSeedPhrase, Koios, Lucid } from "@lucid-evolution/lucid";
+
 console.log("hello");
 
 console.log("test");
@@ -159,3 +161,38 @@ export const fetchLukeSkywalker = async (): Promise<LukeSkywalker> => {
   // runtime type validation - effect.schema - zod - typebox
   return jsonvalue;
 };
+
+const user1 = await Lucid(
+  new Koios("https://preprod.koios.rest/api/v1"),
+  "Preprod"
+);
+user1.selectWallet.fromSeed(
+  "mule quit evil loyal hamster finish plastic tattoo walk grace above bring swing fiction cook corn unusual coral decade poverty lake state lift shrug"
+);
+
+//bech32
+console.log(await user1.wallet().address());
+
+console.log(await user1.wallet().getUtxos());
+
+const user2 = await Lucid(
+  new Koios("https://preprod.koios.rest/api/v1"),
+  "Preprod"
+);
+user2.selectWallet.fromSeed(
+  "salad word urban spoil love crawl talk fall lady early equal become delay hour sphere cupboard envelope dog real comfort middle resemble forward response"
+);
+console.log("user2: ", await user2.wallet().address());
+
+const tx = await user1
+  .newTx()
+  .pay.ToAddress(
+    "addr_test1qzqaf0vrfgp6rjexculvz95uh5wfwf80scuzk0pkhk0uwhtyf3p6v74w39symppcqpsnfl8g883x4gh0mmlg5lua7e0qw5w84m",
+    { lovelace: 5_000_000n }
+  )
+  .complete();
+
+const signed = await tx.sign.withWallet().complete();
+
+const txhash = await signed.submit();
+console.log(txhash);
