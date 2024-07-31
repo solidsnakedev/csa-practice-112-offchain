@@ -1,6 +1,9 @@
 import { Data, fromText, toHex, Address } from "@lucid-evolution/lucid";
 
-//redeemer type
+
+// ********************************************************
+// *****  Market Redeemer type from NFT market place *****
+// ********************************************************
 
 //****** easy way - less readable IMO ****************/
 // const MarketRedeemerSchema = Data.Object({
