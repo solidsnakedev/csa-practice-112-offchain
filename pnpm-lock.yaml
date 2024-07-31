@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@anastasia-labs/cardano-multiplatform-lib-nodejs':
+        specifier: 5.3.1-2
+        version: 5.3.1-2
       '@lucid-evolution/lucid':
         specifier: ^0.2.47
         version: 0.2.47(fast-check@3.20.0)
