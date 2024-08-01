@@ -167,6 +167,7 @@ const user1 = await Lucid(
   new Koios("https://preprod.koios.rest/api/v1"),
   "Preprod"
 );
+
 user1.selectWallet.fromSeed(
   "mule quit evil loyal hamster finish plastic tattoo walk grace above bring swing fiction cook corn unusual coral decade poverty lake state lift shrug"
 );
