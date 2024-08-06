@@ -43,7 +43,7 @@ const CredentialSchema = Data.Enum([
 
 const AddressSchema = Data.Object({
   paymentCredential: CredentialSchema,
-  stakeCredential: Data.Nullable(CredentialSchema)
+  stakeCredential: Data.Nullable(CredentialSchema) // ==  maybe CredentialSchema
 });
 
 type AddressObject = Data.Static<typeof AddressSchema>;
