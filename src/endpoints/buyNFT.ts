@@ -4,11 +4,10 @@ import { SimpleSaleDatum, MarketRedeemerEnum, fromAddress } from "../contract-sc
 export type BuyNFTConfig = {
   lucid: LucidEvolution;
   marketplace: string;
-  owner_pkh: string;
   priceOfAsset: bigint;
 };
 
-export const withdrawNFT = async (buyNFTConfig: BuyNFTConfig) => {
+export const buyNFT = async (buyNFTConfig: BuyNFTConfig) => {
   const allContractUtxos = await buyNFTConfig.lucid.utxosAt(buyNFTConfig.marketplace);
 
   const allUserContractUtxos = allContractUtxos.filter(async (value) => {
