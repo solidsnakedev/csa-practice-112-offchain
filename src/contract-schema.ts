@@ -119,7 +119,7 @@ const PointerSchema = Data.Object({
 });
 const InlineSchema = Data.Object({ Inline: Data.Tuple([CredentialSchema]) });
 
-const AddressSchema = Data.Object({
+export const AddressSchema = Data.Object({
   paymentCredential: CredentialSchema,
   stakeCredential: Data.Nullable(Data.Enum([InlineSchema, PointerSchema])),
 });
