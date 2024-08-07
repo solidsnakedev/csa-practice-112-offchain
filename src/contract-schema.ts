@@ -119,7 +119,7 @@ const PointerSchema = Data.Object({
 });
 const InlineSchema = Data.Object({ Inline: Data.Tuple([CredentialSchema]) });
 
-const AddressSchema = Data.Object({
+export const AddressSchema = Data.Object({
   paymentCredential: CredentialSchema,
   stakeCredential: Data.Nullable(Data.Enum([InlineSchema, PointerSchema])),
 });
@@ -166,7 +166,7 @@ console.log(
 );
 
 //bech32
-const myAddr =
+export const myAddr =
   "addr_test1qzqaf0vrfgp6rjexculvz95uh5wfwf80scuzk0pkhk0uwhtyf3p6v74w39symppcqpsnfl8g883x4gh0mmlg5lua7e0qw5w84m";
 
 // Plutus or Aiken
@@ -266,7 +266,7 @@ const MarketRedeemerEnumSchema = Data.Enum([
 ]);
 
 type MarketRedeemerEnum = Data.Static<typeof MarketRedeemerEnumSchema>;
-const MarketRedeemerEnum =
+export const MarketRedeemerEnum =
   MarketRedeemerEnumSchema as unknown as MarketRedeemerEnum;
 
 //-- Datum schema
@@ -281,11 +281,11 @@ export const SimpleSaleDatum = SimpleSaleSchema as unknown as SimpleSaleDatum;
 
 
 // --- example
-const simplesale: SimpleSaleDatum = {
+export const simplesale: SimpleSaleDatum = {
   sellerAddress: fromAddress(myAddr),
   priceOfAsset: 10_000_000n,
 };
-const simplesaleCbor: string = Data.to(simplesale, SimpleSaleDatum);
+export const simplesaleCbor: string = Data.to(simplesale, SimpleSaleDatum);
 console.log("simplesaleCbor: ", simplesaleCbor);
 
 export const stringify = (data: any) =>
