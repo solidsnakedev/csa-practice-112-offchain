@@ -32,7 +32,7 @@ export const withdrawNFT = async (buyNFTConfig: BuyNFTConfig) => {
   };
 
 
-  const redeemer = Data.to("Withdraw", MarketRedeemerEnum);
+  const redeemer = Data.to("Buy", MarketRedeemerEnum);
   const signBuilder =
     await
     buyNFTConfig.lucid
