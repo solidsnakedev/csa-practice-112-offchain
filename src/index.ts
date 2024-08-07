@@ -1,167 +1,15 @@
-import { generateSeedPhrase, Koios, Lucid } from "@lucid-evolution/lucid";
-import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs"
+import {
+  fromUnit,
+  Koios,
+  Lucid,
+  paymentCredentialOf,
+  scriptFromNative,
+} from "@lucid-evolution/lucid";
+import { lockNFT } from "./endpoints/lockNFT.js";
+import { NFTMinter } from "./endpoints/NFTMinter.js";
 
-console.log("hello");
-
-console.log("test");
-
-// export const addTwoNumbers = (a: number, b: number): number => {
-//   return a + b;
-// };
-
-// export const addTwoNumbers = (params: { first: number; second: number }) => {
-//   return params.first + params.second;
-// };
-
-// type AddTwoNumbers = {
-//   first: number;
-//   second: number;
-// };
-
-// export const addTwoNumbers = (params: AddTwoNumbers) => {
-//   return params.first + params.second;
-// };
-
-// type FirstLast = {
-//   first: string;
-//   last?: string;
-// };
-
-// export const getName = (params: FirstLast) => {
-//   if (params.last) {
-//     return `${params.first} ${params.last}`;
-//   }
-//   return params.first;
-// };
-
-// const name1 = getName({ first: "sds", last: "asdad" });
-// const name2 = getName({ first: "sds" });
-
-// type User = {
-//   id: number;
-//   firstName: string;
-//   lastName: string;
-//   /**
-//    * How do we ensure that role is only one of:
-//    * - 'admin'
-//    * - 'user'
-//    * - 'super-admin'
-//    */
-//   role: "admin" | "user" | "super-admin";
-// };
-
-// export const defaultUser: User = {
-//   id: 1,
-//   firstName: "Matt",
-//   lastName: "Pocock",
-//   role: "admin",
-// };
-
-// type User = {
-//   id: number;
-//   firstName: string;
-//   lastName: string;
-//   /**
-//    * How do we ensure that role is only one of:
-//    * - 'admin'
-//    * - 'user'
-//    * - 'super-admin'
-//    */
-//   role: "admin" | "user" | "super-admin";
-//   posts: Post[]
-// };
-
-// type Post = {
-//   id: number;
-//   title: string;
-// }
-
-// export const defaultUser: User = {
-//   id: 1,
-//   firstName: "Matt",
-//   lastName: "Pocock",
-//   role: "admin",
-//   posts: [
-//     {
-//       id: 1,
-//       title: "How I eat so much cheese",
-//     },
-//     {
-//       id: 2,
-//       title: "Why I don't eat more vegetables",
-//     },
-//   ],
-// };
-
-type User = {
-  id: number;
-  firstName: string;
-  lastName: string;
-  role: "admin" | "user" | "super-admin";
-  posts: Array<Post>;
-};
-
-type Post = {
-  id: number;
-  title: string;
-};
-
-/**
- * How do we ensure that makeUser ALWAYS
- * returns a user?
- */
-const makeUser = (id: number, firstName: string, lastName: string): User => {
-  return {
-    id,
-    firstName,
-    lastName,
-    role: "user",
-    posts: [],
-  };
-};
-
-const guitarists = new Set<string>();
-
-guitarists.add("Jimi Hendrix");
-guitarists.add("Eric Clapton");
-
-const createCache = () => {
-  const cache: Record<string, string> = {};
-
-  const add = (id: string, value: string) => {
-    cache[id] = value;
-  };
-
-  const remove = (id: string) => {
-    delete cache[id];
-  };
-
-  return {
-    cache,
-    add,
-    remove,
-  };
-};
-
-const cachevalue = createCache().add("1", "value1");
-
-interface LukeSkywalker {
-  name: string;
-  height: string;
-  mass: string;
-  hair_color: string;
-  skin_color: string;
-  eye_color: string;
-  birth_year: string;
-  gender: string;
-}
-
-export const fetchLukeSkywalker = async (): Promise<LukeSkywalker> => {
-  const data = await fetch("https://swapi.dev/api/people/1");
-  const jsonvalue = await data.json();
-  // runtime type validation - effect.schema - zod - typebox
-  return jsonvalue;
-};
+const nftMarketPlace =
+  "5903de010000323232323232322323232232253330083232533300a3008300b3754002264a666016601260186ea80184c8cc88c8c8c94ccc044c038c048dd500109919299980b180c991980080080211299980c0008a5eb804c8c94ccc05d4ccc05ccdd79806180c9baa002374c00a2a66602e66ebcc03cc064dd5001005099baf301c301d301d3019375400466e9520043301b37526e50dd980325eb805280a5013301b00233004004001133004004001301c002301a00114a22ca666024602000c297adef6c6013232330010014bd6f7b63011299980c00089980c99bb04c1014000374c00697adef6c6013232323253330193372091010000213301d337609801014000374c00e00a2a66603266e3d2210000213301d337609801014000374c00e00626603a66ec0dd48011ba600133006006003375660340066eb8c060008c070008c068004c8cc0040052f5bded8c044a66602e00226603066ec13001014000375001097adef6c6013232323253330183372091010000213301c337609801014000375001800a2a66603066e3d2210000213301c337609801014000375001800626603866ec0dd48011ba800133006006003375a60320066eb8c05c008c06c008c064004c058c04cdd50010b1bac30153016301630123754602a0046028602a00260206ea801cdd6980098071baa00b3004300e3754016460226024002264660020026eb0c044c048c048c048c048c048c048c048c048c038dd5180218071baa00522533301000114a0264a66601c66e3cdd718098010020a511330030030013013001375c601e60186ea800458c004c02cdd5180098059baa0082300e00114984d958c94ccc01cc01400454ccc028c024dd50010a4c2c2a66600e60080022a66601460126ea800852616163007375400264a66600a6006600c6ea80104c8c8c8c94ccc030c03c0084c92653330093007300a3754006264646464a66602060260042646493192999807980680089919299980a180b80109924c64a666024602000226464a66602e60340042649318080008b180c000980a1baa00215333012300f0011323232323232533301b301e002149858dd6980e000980e0011bad301a001301a002375a603000260286ea800858c048dd50008b180a80098089baa0031533300f300c00115333012301137540062930b0b18079baa00230090031630110013011002300f001300b37540062c2c6eb4c034004c034008c02c004c01cdd50020b1192999803180200089919299980598070010a4c2c6eb8c030004c020dd50010a999803180180089919299980598070010a4c2c6eb8c030004c020dd50010b18031baa001370e90011b87480015cd2ab9d5573caae7d5d02ba157441";
 
 const user1 = await Lucid(
   new Koios("https://preprod.koios.rest/api/v1"),
@@ -172,114 +20,24 @@ user1.selectWallet.fromSeed(
   "mule quit evil loyal hamster finish plastic tattoo walk grace above bring swing fiction cook corn unusual coral decade poverty lake state lift shrug"
 );
 
-//bech32
-console.log(await user1.wallet().address());
-
-console.log(await user1.wallet().getUtxos());
-
-const user2 = await Lucid(
-  new Koios("https://preprod.koios.rest/api/v1"),
-  "Preprod"
+// console.log(await user1.wallet().getUtxos());
+const user1Addr = await user1.wallet().address();
+const tokenInfo = fromUnit(
+  "10ec70032c24b622e11d95eb1eebb703bca6779815b57c519c7479584275726e61626c65546f6b656e"
 );
-user2.selectWallet.fromSeed(
-  "salad word urban spoil love crawl talk fall lady early equal become delay hour sphere cupboard envelope dog real comfort middle resemble forward response"
-);
-console.log("user2: ", await user2.wallet().address());
+// const minted = await NFTMinter({
+//   lucid: user1,
+//   TokenName: "BurnableToken",
+//   address: user1Addr,
+// });
+// console.log(minted)
 
-const tx = await user1
-  .newTx()
-  .pay.ToAddress(
-    "addr_test1qzqaf0vrfgp6rjexculvz95uh5wfwf80scuzk0pkhk0uwhtyf3p6v74w39symppcqpsnfl8g883x4gh0mmlg5lua7e0qw5w84m",
-    { lovelace: 5_000_000n }
-  )
-  .complete()
+const myTx = await lockNFT({
+  lucid: user1,
+  priceOfAsset: 10_000_000n,
+  policyID: tokenInfo.policyId,
+  TokenName: tokenInfo.assetName!,
+  marketPlace: nftMarketPlace
+});
 
-const signed = await tx.sign.withWallet().complete();
-
-// const txhash = await signed.submit();
-// console.log(txhash);
-console.log("hash", signed.toHash())
-console.log("cbor", signed.toCBOR())
-console.log("txbody()", CML.Transaction.from_cbor_hex(signed.toCBOR()).body().to_json()) 
-console.log("witness()", CML.Transaction.from_cbor_hex(signed.toCBOR()).witness_set().to_json())
-
-// transaction =
-//   [ transaction_body
-//   , transaction_witness_set
-//   , bool
-//   , auxiliary_data / null
-//   ] 
-
-// transaction_input = [ transaction_id : $hash32
-//   , index : uint .size 2
-//   ]
-// transaction_body =
-//   { 0 : set<transaction_input>             ; inputs
-//   , 1 : [* transaction_output]
-//   , 2 : coin                               ; fee
-//   , ? 3 : slot_no                          ; time to live
-//   , ? 4 : certificates
-//   , ? 5 : withdrawals
-//   , ? 7 : auxiliary_data_hash
-//   , ? 8 : slot_no                          ; validity interval start
-//   , ? 9 : mint
-//   , ? 11 : script_data_hash
-//   , ? 13 : nonempty_set<transaction_input> ; collateral inputs
-//   , ? 14 : required_signers
-//   , ? 15 : network_id
-//   , ? 16 : transaction_output              ; collateral return
-//   , ? 17 : coin                            ; total collateral
-//   , ? 18 : nonempty_set<transaction_input> ; reference inputs
-//   , ? 19 : voting_procedures               ; New; Voting procedures
-//   , ? 20 : proposal_procedures             ; New; Proposal procedures
-//   , ? 21 : coin                            ; New; current treasury value
-//   , ? 22 : positive_coin                   ; New; donation
-//   }
-
-//   transaction_witness_set =
-//   { ? 0: nonempty_set<vkeywitness> // wallet
-//   , ? 1: nonempty_set<native_script>
-//   , ? 2: nonempty_set<bootstrap_witness> // byron
-//   , ? 3: nonempty_set<plutus_v1_script>
-//   , ? 4: nonempty_set<plutus_data> // datum_hash v1
-//   , ? 5: redeemers // list of redeemers
-//   , ? 6: nonempty_set<plutus_v2_script>
-//   , ? 7: nonempty_set<plutus_v3_script>
-//   }
-
-//   vkeywitness = [ $vkey, $signature ]
-
-// [
-//   {
-//       0: [
-//           [
-//               h'805a8eea5c8e37875d05c82e1f360fa47572190486effc149a56d383ab828648',
-//               1,
-//           ],
-//       ],
-//       1: [
-//           [
-//               h'0081d4bd834a03a1cb26c73ec1169cbd1c9724ef86382b3c36bd9fc75d644c43a67aae89604d8438006134fce839e26aa2efdefe8a7f9df65e',
-//               5000000_2,
-//           ],
-//           [
-//               h'00ac28744693abc3bda6286a736b5e646f45049367503c8111c6bd324b937778b28a571bfdcb67099fd9e62edf75e019d7d2c7cde5786d8ef3',
-//               9663894_2,
-//           ],
-//       ],
-//       2: 168053_2,
-//   },
-//   {
-//       0: [
-//           [
-//               h'afe2655f36fe02e4d930c0046ac22b3d7191a219729f4505d9a9f7ada3da9864',
-//               h'4e4615df3c0c60f2ee5b9e537b1ccd2303f5f558d3d6eb1fecc1d2af8d5d881899d41d8af9b2f2769d46c54e37da87db3ae993276d00a69b0866c8516dd34302',
-//           ],
-//       ],
-//   },
-//   true,
-//   null,
-// ]
-
-
-
+console.log(myTx)
