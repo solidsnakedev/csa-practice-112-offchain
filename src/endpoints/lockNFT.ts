@@ -4,10 +4,7 @@ import {
   Validator,
   validatorToAddress,
 } from "@lucid-evolution/lucid";
-import {
-  fromAddress,
-  SimpleSaleDatum,
-} from "../contract-schema.js";
+import { fromAddress, SimpleSaleDatum } from "../market-schema.js";
 
 export type LockNFTConfig = {
   lucid: LucidEvolution;
@@ -46,9 +43,17 @@ export const lockNFT = async (lockNFTConfig: LockNFTConfig) => {
       { [lockNFTConfig.policyID + lockNFTConfig.TokenName]: 1n }
     )
     .complete();
-
   const signed = await tx.sign.withWallet().complete();
 
   const submit = await signed.submit();
-  return submit
+  return submit;
 };
+// Rust
+// type Result = Ok | Error
+// // Rust
+// type Option = Some ... | None
+
+// // Haskell
+// type Either = Left | Right
+// // Haskell
+// type Maybe = Just .. | Nothing
