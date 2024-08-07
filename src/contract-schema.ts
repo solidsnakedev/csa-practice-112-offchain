@@ -266,7 +266,7 @@ const MarketRedeemerEnumSchema = Data.Enum([
 ]);
 
 type MarketRedeemerEnum = Data.Static<typeof MarketRedeemerEnumSchema>;
-const MarketRedeemerEnum =
+export const MarketRedeemerEnum =
   MarketRedeemerEnumSchema as unknown as MarketRedeemerEnum;
 
 //-- Datum schema
@@ -275,8 +275,8 @@ const SimpleSaleSchema = Data.Object({
   priceOfAsset: Data.Integer(),
 });
 
-type SimpleSaleDatum = Data.Static<typeof SimpleSaleSchema>;
-const SimpleSaleDatum = SimpleSaleSchema as unknown as SimpleSaleDatum;
+export type SimpleSaleDatum = Data.Static<typeof SimpleSaleSchema>;
+export const SimpleSaleDatum = SimpleSaleSchema as unknown as SimpleSaleDatum;
 
 
 
