@@ -13,7 +13,6 @@ export const withdrawNFT = async (withdrawNFTConfig: WithdrawNFTConfig) => {
     type: "PlutusV2",
     script: withdrawNFTConfig.marketplace,
   };
-
   const contractAddr = validatorToAddress("Preprod", contract);
 
 
