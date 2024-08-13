@@ -8,7 +8,14 @@ export type WithdrawNFTConfig = {
 export const withdrawNFT = (withdrawNFTConfig: WithdrawNFTConfig) => {
   const allContractUtxos = await withdrawNFTConfig.lucid.utxosAt(contractAddress);
 
-  const allUserContractUtxos = allContractUtxos.filter((value) => {
+  //Question: is the purpose of this to find all utxos that may contain this datum?? and then are
+  //          submitted to the validator using the collectFrom() function?  What if there are multiple
+  //          utxos with a datum that matches the requirements?  Since the collectFrom() function takes
+  //          an array of utxos why not just submit all the utxos and let the validator do what it is written
+  //          to do which is pass or fail the transaction?
+  // what if? utxo != SimpleSaleDatum
+  // aiken validator will fail
+  const allUserContractUtxos = allContractUtxos.filter(async (value) => {
     if (value.datum) {
       try {
         const datum = Data.from(value.datum, SimpleSaleDatum);
