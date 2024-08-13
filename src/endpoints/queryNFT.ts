@@ -22,10 +22,8 @@ export const queryNFT = async (lucid: LucidEvolution, contractCbor: string, purc
       const datum = Data.from(value.datum, SimpleSaleDatum);
       const price_equal = datum.priceOfAsset === purchasePrice;
       const same_addr = datum.sellerAddress === fromAddress(await lucid.wallet().address());
-      price_equal && same_addr;
-      //return allContractUtxos;
-     }    
-   
+      price_equal && same_addr;   
+     }       
   }
   );
 
