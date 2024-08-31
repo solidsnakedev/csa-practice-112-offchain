@@ -303,3 +303,14 @@ console.log(
   "readable datum: ",
   stringify(Data.from(rawSimpleSaleCbor, SimpleSaleDatum))
 );
+
+
+
+/*
+
+another example cddl example
+
+121([_ 121([ _121([_ 121([_ h' 954039859038G89GF8DG97']),0])])])
+Constr(0, [Constr (0, [Constr (0, [Constr(0, "954039859038G89GF8DG97",0)])])])
+
+*/

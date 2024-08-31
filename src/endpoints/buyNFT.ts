@@ -4,8 +4,10 @@ import { SimpleSaleDatum, MarketRedeemerEnum, fromAddress } from "../contract-sc
 export type BuyNFTConfig = {
   lucid: LucidEvolution;
   marketplace: string;
-  utxo: UTxO
+  utxo: UTxO,
+  sellerAddr: Address
 };
+
 
 export const buyNFT = async (buyNFTConfig: BuyNFTConfig) => {
 
@@ -19,6 +21,7 @@ export const buyNFT = async (buyNFTConfig: BuyNFTConfig) => {
     await
     buyNFTConfig.lucid
       .newTx()
+      .pay.ToAddress(buyNFTConfig.sellerAddr, {lovelace: 10_000_000n})
       .collectFrom([buyNFTConfig.utxo], redeemer)
       .attach.SpendingValidator(contract)
       .complete();
